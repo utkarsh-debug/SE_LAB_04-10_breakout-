@@ -31,6 +31,8 @@ class GameEngine:
         self.bricks = self._build_bricks()
         self.lives = 3
         self.game_over = False
+        self.score = 0
+        self.combo = 1
 
     def _build_bricks(self):
         bricks = []
@@ -87,6 +89,8 @@ class GameEngine:
         if self.game_over and key == pygame.K_r:
             self.lives = 3
             self.game_over = False
+            self.score = 0
+            self.combo = 1
             self.bricks = self._build_bricks()
             self._reset_ball()
 
@@ -111,11 +115,14 @@ class GameEngine:
 
                     if brick.hits_remaining <= 0:
                         self.bricks.remove(brick)
+                        self.score += 10 * self.combo
+                        self.combo += 1
 
                 break
 
         if self.ball.is_below(HEIGHT):
             self.lives -= 1
+            self.combo = 1
 
             if self.lives <= 0:
                 self.game_over = True
@@ -144,6 +151,20 @@ class GameEngine:
             font,
             f"Lives: {self.lives}",
             (10, 35)
+        )
+
+        renderer.draw_text(
+            surface,
+            font,
+            f"Score: {self.score}",
+            (10, 60)
+        )
+
+        renderer.draw_text(
+            surface,
+            font,
+            f"Combo: x{self.combo}",
+            (10, 85)
         )
 
         if self.game_over:
