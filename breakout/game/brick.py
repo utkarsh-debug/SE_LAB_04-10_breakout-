@@ -6,11 +6,21 @@ import pygame
 
 
 class Brick:
-    def __init__(self, x, y, width, height, hits_remaining=1, color=(200, 90, 90)):
+    def __init__(
+        self,
+        x,
+        y,
+        width,
+        height,
+        brick_type="normal",
+        hits_remaining=1,
+        color=(200, 90, 90),
+    ):
         self.x = x
         self.y = y
         self.width = width
         self.height = height
+        self.brick_type = brick_type
         self.hits_remaining = hits_remaining
         self.color = color
 

@@ -41,7 +41,31 @@ class GameEngine:
             for col in range(BRICK_COLS):
                 x = start_x + col * (BRICK_WIDTH + BRICK_GAP)
                 y = BRICK_TOP_MARGIN + row * (BRICK_HEIGHT + BRICK_GAP)
-                bricks.append(Brick(x, y, BRICK_WIDTH, BRICK_HEIGHT))
+
+                if row == 0:
+                    brick_type = "unbreakable"
+                    hits_remaining = 999999
+                    color = (100, 100, 100)
+                elif row == 1:
+                    brick_type = "strong"
+                    hits_remaining = 3
+                    color = (220, 160, 60)
+                else:
+                    brick_type = "normal"
+                    hits_remaining = 1
+                    color = (200, 90, 90)
+
+                bricks.append(
+                    Brick(
+                        x,
+                        y,
+                        BRICK_WIDTH,
+                        BRICK_HEIGHT,
+                        brick_type=brick_type,
+                        hits_remaining=hits_remaining,
+                        color=color,
+                    )
+                )
 
         return bricks
 
@@ -81,10 +105,12 @@ class GameEngine:
 
         for brick in self.bricks[:]:
             if handle_ball_brick_collision(self.ball, brick):
-                brick.hits_remaining -= 1
 
-                if brick.hits_remaining <= 0:
-                    self.bricks.remove(brick)
+                if brick.brick_type != "unbreakable":
+                    brick.hits_remaining -= 1
+
+                    if brick.hits_remaining <= 0:
+                        self.bricks.remove(brick)
 
                 break
 
